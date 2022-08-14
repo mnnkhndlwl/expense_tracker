@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import './transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,16 +32,21 @@ class MyHomePage extends StatelessWidget {
     ),
   ];
 
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Flutter App'),
+          backgroundColor: Color.fromARGB(255, 205, 14, 193),
+          title: Text('Expense Tracker'),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            // our Chart
             Container(
               width: double.infinity,
               child: Card(
@@ -49,11 +55,38 @@ class MyHomePage extends StatelessWidget {
                 elevation: 8,
               ),
             ),
+            //user Input
+            Card(
+              elevation: 10,
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(labelText: 'Title'),
+                      controller: titleController,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(labelText: 'Amount'),
+                      controller: amountController,
+                    ),
+                    FlatButton(
+                      child: Text('Add Transaction'),
+                      textColor: Colors.deepPurpleAccent,
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // our Expenses
             Column(
               children: transactions.map((tx) {
                 return Card(
                   child: Row(
                     children: <Widget>[
+                      // our amount
                       Container(
                         margin: EdgeInsets.symmetric(
                           vertical: 10,
@@ -67,7 +100,7 @@ class MyHomePage extends StatelessWidget {
                         ),
                         padding: EdgeInsets.all(10),
                         child: Text(
-                         '₹ : ${tx.amount}',
+                          '₹ ${tx.amount}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -75,6 +108,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      // our title and date
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -86,9 +120,9 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            tx.date.toString(),
+                            DateFormat("yMd").format(tx.date),
                             style: TextStyle(
-                             color: Colors.grey,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
