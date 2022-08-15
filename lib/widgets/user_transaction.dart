@@ -9,28 +9,7 @@ class UserTransactions extends StatefulWidget {
 }
 
 class _UserTransactionsState extends State<UserTransactions> {
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'Momos',
-      amount: 30,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Fruti',
-      amount: 20,
-      date: DateTime.now(),
-    ),
-  ];
-
-  void _addNewTransaction(String txTitle, double txAmount) {
-    final newTx = Transaction(title: txTitle, amount: txAmount,date: DateTime.now(),id: DateTime.now().toString(),);
-
-    setState(() {
-      _userTransactions.add(newTx);
-    });
-  }
+   
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +18,7 @@ class _UserTransactionsState extends State<UserTransactions> {
         //user Input
         NewTransaction(_addNewTransaction),
         // our Expenses
-        TransactionList(_userTransactions),
+        
       ],
     );
   }
