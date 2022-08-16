@@ -1,4 +1,6 @@
 import 'dart:ui';
+import './widgets/chart.dart';
+
 import './widgets/new_transaction.dart';
 
 import './widgets/transaction_list.dart';
@@ -11,7 +13,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Expense tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        accentColor: Colors.indigo,
+        fontFamily: 'Quicksand',
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -37,6 +50,16 @@ class _MyHomePageState extends State<MyHomePage> {
     //   date: DateTime.now(),
     // ),
   ];
+
+  List<Transaction> get _recentTransactions { // transactions younger than 7 days are included here
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -68,8 +91,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 124, 77, 255),
-        title: Text('Expense Tracker'),
+        // backgroundColor: Color.fromARGB(255, 124, 77, 255),
+        title: Text(
+          'Expense Tracker',
+          // style: TextStyle(
+          //   fontFamily: 'OpenSans',
+          // ),
+        ),
         actions: <Widget>[
           IconButton(
             onPressed: () => _startAddNewTransaction(context),
@@ -83,20 +111,14 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // our Chart
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.deepPurpleAccent,
-                child: Text('Chart'),
-                elevation: 8,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        // backgroundColor: Colors.deepPurpleAccent,
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
